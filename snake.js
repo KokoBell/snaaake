@@ -41,7 +41,7 @@ class Snake {
         this.body = []
         this.direction = 'right'
         this.points = 0
-        this.highScore = 0
+        this.highScore = getItem('highScore') ? getItem('highScore') : 0
     }
     show() {
         stroke('pink')
@@ -118,6 +118,7 @@ class Snake {
     updateHighScore() {
         if (this.points > this.highScore) {
             this.highScore = this.points
+            storeItem('highScore',this.highScore)
         }
     }
     reset() {
