@@ -133,6 +133,7 @@ class Snake {
         this.vel = createVector(this.xDir, this.yDir)
         this.body = []
         this.direction = 'right'
+        this.points = 0
         key = ''
     }
 }
