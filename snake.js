@@ -3,7 +3,7 @@ let w, h
 let fruit
 let gameOver = false
 let wall = 18
-let snakeSpeed = 6
+let snakeSpeed = 3
 let playing = false
 
 class Food {
