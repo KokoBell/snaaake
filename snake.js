@@ -3,6 +3,8 @@ let w, h
 let fruit
 let gameOver = false
 let wall = 18
+let snakeSpeed = 6
+let playing = false
 
 class Food {
     constructor() {
@@ -28,16 +30,17 @@ class Snake {
     constructor(radius) {
         this.radius = radius
         this.pos = createVector(100, 100)
-        this.velMag = 3
+        this.velMag = snakeSpeed
         this.xDir = this.velMag
         this.yDir = 0
         this.vel = createVector(this.xDir, this.yDir)
         this.body = []
         this.direction = 'right'
+        this.points = 0
     }
     show() {
-        stroke(255)
-        fill(255)
+        stroke('pink')
+        fill('pink')
         circle(this.pos.x + 0, this.pos.y + 0, this.radius + 0)
         for (let i = this.body.length - 1; i > 0; i--) {
             this.body[i] = this.body[i - 1]
@@ -118,19 +121,19 @@ class Snake {
             }
             food.eaten = true
             this.body.push([food.x + offset, food.y])
+            this.points += 100
         }
         food.digest()
     }
     reset() {
         this.pos = createVector(100, 100)
-        this.velMag = 3
+        this.velMag = snakeSpeed
         this.xDir = this.velMag
         this.yDir = 0
         this.vel = createVector(this.xDir, this.yDir)
         this.body = []
         this.direction = 'right'
         key = ''
-        console.log(this)
     }
 }
 
@@ -142,10 +145,14 @@ function setup() {
     h = windowHeight * 0.96
     createCanvas(w, h)
     fruit = new Food()
+    loop()
     snake = new Snake(25, createVector(100, 100))
 }
 
 function draw() {
+    if (playing) {
+        loop()
+    }
     background(0)
     fruit.show()
     snake.show()
@@ -154,6 +161,12 @@ function draw() {
     }
     snake.eat(fruit)
     snake.move()
+    fill('orange')
+    stroke('orange')
+    textSize(16)
+    text('Points',w-100,25)
+    textSize(24)
+    text(snake.points,w-100,50)
     changeDirection()
 }
 
