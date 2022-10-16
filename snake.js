@@ -28,7 +28,8 @@ class Snake {
     constructor(radius) {
         this.radius = radius
         this.pos = createVector(100, 100)
-        this.xDir = 5
+        this.velMag = 3
+        this.xDir = this.velMag
         this.yDir = 0
         this.vel = createVector(this.xDir, this.yDir)
         this.body = []
@@ -122,7 +123,8 @@ class Snake {
     }
     reset() {
         this.pos = createVector(100, 100)
-        this.xDir = 5
+        this.velMag = 3
+        this.xDir = this.velMag
         this.yDir = 0
         this.vel = createVector(this.xDir, this.yDir)
         this.body = []
@@ -136,8 +138,8 @@ function setup() {
     rectMode(CENTER)
     imageMode(CENTER)
     angleMode(DEGREES)
-    w = windowWidth * 0.99
-    h = windowHeight * 0.965
+    w = windowWidth * 0.98
+    h = windowHeight * 0.96
     createCanvas(w, h)
     fruit = new Food()
     snake = new Snake(25, createVector(100, 100))
@@ -174,23 +176,23 @@ function StopGame() {
 
 function changeDirection() {
     if (!snake.edges()) {
-        if (key === 'ArrowRight' && snake.vel.x != -6) {
-            snake.xDir = 6
+        if (key === 'ArrowRight' && snake.vel.x != -snake.velMag) {
+            snake.xDir = snake.velMag
             snake.vel = createVector(snake.xDir, 0)
             snake.direction = 'right'
         }
-        if (key === 'ArrowLeft' && snake.vel.x != 6) {
-            snake.xDir = -6
+        if (key === 'ArrowLeft' && snake.vel.x != snake.velMag) {
+            snake.xDir = -snake.velMag
             snake.vel = createVector(snake.xDir, 0)
             snake.direction = 'left'
         }
-        if (key === 'ArrowUp' && snake.vel.y != 6) {
-            snake.yDir = -6
+        if (key === 'ArrowUp' && snake.vel.y != snake.velMag) {
+            snake.yDir = -snake.velMag
             snake.vel = createVector(0, snake.yDir)
             snake.direction = 'up'
         }
-        if (key === 'ArrowDown' && snake.vel.y != -6) {
-            snake.yDir = 6
+        if (key === 'ArrowDown' && snake.vel.y != -snake.velMag) {
+            snake.yDir = snake.velMag
             snake.vel = createVector(0, snake.yDir)
             snake.direction = 'down'
         }
