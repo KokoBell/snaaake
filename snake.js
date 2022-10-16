@@ -6,6 +6,10 @@ let wall = 18
 let snakeSpeed = 3
 let playing = false
 
+// Infinite walls
+// Increase speed as your score gets higher
+// Cool effects (tracers to the snake, or cool backgrounds like grass or flowers)
+
 class Food {
     constructor() {
         this.x = random(wall, w - wall)
@@ -72,23 +76,6 @@ class Snake {
     move() {
         if (!this.edges()) {
             this.pos.add(this.vel)
-        } else {
-            if (this.edges() == 'bottom') {
-                this.vel.mult(createVector(1, -1))
-                this.pos.add(this.vel)
-            }
-            if (this.edges() == 'top') {
-                this.vel.mult(createVector(1, -1))
-                this.pos.add(this.vel)
-            }
-            if (this.edges() == 'right') {
-                this.vel.mult(createVector(-1, 1))
-                this.pos.add(this.vel)
-            }
-            if (this.edges() == 'left') {
-                this.vel.mult(createVector(-1, 1))
-                this.pos.add(this.vel)
-            }
         }
     }
     edges() {
@@ -123,6 +110,7 @@ class Snake {
             food.eaten = true
             this.body.push([food.x + offset, food.y])
             this.points += 100
+            this.velMag = this.velMag * 1.05
         }
         food.digest()
         this.updateHighScore()
