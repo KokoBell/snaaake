@@ -37,6 +37,7 @@ class Snake {
         this.body = []
         this.direction = 'right'
         this.points = 0
+        this.highScore = 0
     }
     show() {
         stroke('pink')
@@ -124,6 +125,12 @@ class Snake {
             this.points += 100
         }
         food.digest()
+        this.updateHighScore()
+    }
+    updateHighScore() {
+        if (this.points > this.highScore) {
+            this.highScore = this.points
+        }
     }
     reset() {
         this.pos = createVector(100, 100)
@@ -165,9 +172,13 @@ function draw() {
     fill('orange')
     stroke('orange')
     textSize(16)
-    text('Points',w-100,25)
+    text('Points', w - 100, 25)
     textSize(24)
-    text(snake.points,w-100,50)
+    text(snake.points, w - 100, 50)
+    textSize(16)
+    text('High Score', w - 200, 25)
+    textSize(24)
+    text(snake.highScore, w - 200, 50)
     changeDirection()
 }
 
