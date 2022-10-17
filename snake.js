@@ -38,9 +38,10 @@ class Snake {
         this.xDir = this.velMag
         this.yDir = 0
         this.vel = createVector(this.xDir, this.yDir)
-        this.body = [[99,100],[98,100],[97,100],[96,100],[95,100],[94,100],[93,100],[92,100],[91,100],[90,100],[89,100],[88,100],[87,100],[86,100],[85,100],[84,100],[83,100],[82,100],[81,100],[80,100]]
+        this.body = [[99, 100], [98, 100], [97, 100], [96, 100], [95, 100], [94, 100], [93, 100], [92, 100], [91, 100], [90, 100], [89, 100], [88, 100], [87, 100], [86, 100], [85, 100], [84, 100], [83, 100], [82, 100], [81, 100], [80, 100]]
         this.direction = 'right'
         this.points = 0
+        this.alpha = 1.05
         this.highScore = getItem('highScore') ? getItem('highScore') : 0
     }
     show() {
@@ -110,7 +111,9 @@ class Snake {
             food.eaten = true
             this.body.push([food.x, food.y])
             this.points += 100
-            this.velMag = this.velMag * (1.05 / this.body.length)
+            if (this.points % 400) {
+                this.velMag = this.velMag * this.alpha
+            }
         }
         food.digest()
         this.updateHighScore()
@@ -127,9 +130,10 @@ class Snake {
         this.xDir = this.velMag
         this.yDir = 0
         this.vel = createVector(this.xDir, this.yDir)
-        this.body = [[99,100],[98,100],[97,100],[96,100],[95,100],[94,100],[93,100],[92,100],[91,100],[90,100],[89,100],[88,100],[87,100],[86,100],[85,100],[84,100],[83,100],[82,100],[81,100],[80,100]]
+        this.body = [[99, 100], [98, 100], [97, 100], [96, 100], [95, 100], [94, 100], [93, 100], [92, 100], [91, 100], [90, 100], [89, 100], [88, 100], [87, 100], [86, 100], [85, 100], [84, 100], [83, 100], [82, 100], [81, 100], [80, 100]]
         this.direction = 'right'
         this.points = 0
+        this.alpha = 1.05
         key = ''
     }
 }
