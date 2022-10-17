@@ -110,7 +110,7 @@ class Snake {
             food.eaten = true
             this.body.push([food.x, food.y])
             this.points += 100
-            //this.velMag = this.velMag * 1.05
+            this.velMag = this.velMag * (1.05 / this.body.length)
         }
         food.digest()
         this.updateHighScore()
