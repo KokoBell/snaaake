@@ -3,11 +3,9 @@ let w, h
 let fruit
 let gameOver = false
 let wall = 18
-let snakeSpeed = 3
+let snakeSpeed = 8
 let playing = false
 
-// Infinite walls
-// Increase speed as your score gets higher
 // Cool effects (tracers to the snake, or cool backgrounds like grass or flowers)
 
 class Food {
@@ -19,7 +17,7 @@ class Food {
     show() {
         stroke('lime')
         fill('lime')
-        circle(this.x, this.y, 10)
+        circle(this.x, this.y, snakeSpeed * 3)
     }
     digest() {
         if (this.eaten) {
@@ -44,7 +42,7 @@ class Snake {
         this.alpha = 1.05
         this.highScore = getItem('highScore') ? getItem('highScore') : 0
     }
-    show() {
+    async show() {
         stroke('pink')
         fill('pink')
         circle(this.pos.x + 0, this.pos.y + 0, this.radius + 0)
@@ -73,6 +71,43 @@ class Snake {
             circle(c[0], c[1], this.radius)
         })
         strokeWeight(1)
+    }
+    checkBody() {
+        this.body.forEach((part, index) => {
+            if (index > 20) {
+                let xMag = part[0] - this.pos.x
+                let yMag = part[1] - this.pos.y
+                let dist = sqrt((xMag) ** 2 + (yMag) ** 2)
+                if (dist < 100) {
+                    if (Math.abs(yMag) > Math.abs(xMag)) {
+                        key = 'ArrowLeft'
+                    } else {
+                        key = 'ArrowUp'
+                    }
+                }
+            }
+        })
+    }
+    findFood(food) {
+        this.checkBody()
+        let xMag = food.x - this.pos.x
+        let yMag = food.y - this.pos.y
+        let xD = (xMag) ** 2
+        let yD = (yMag) ** 2
+        if (xD <= 50) {
+            if (yMag > 0) {
+                key = 'ArrowDown'
+            } else {
+                key = 'ArrowUp'
+            }
+        }
+        if (yD <= 50) {
+            if (xMag > 0) {
+                key = 'ArrowRight'
+            } else {
+                key = 'ArrowLeft'
+            }
+        }
     }
     move() {
         this.pos.add(this.vel)
@@ -112,11 +147,11 @@ class Snake {
             this.body.push([food.x, food.y])
             this.points += 100
             if (this.points % 400) {
-                this.velMag = this.velMag * this.alpha
+                //this.velMag = this.velMag * this.alpha
             }
+            food.digest()
+            this.updateHighScore()
         }
-        food.digest()
-        this.updateHighScore()
     }
     updateHighScore() {
         if (this.points > this.highScore) {
@@ -125,6 +160,8 @@ class Snake {
         }
     }
     reset() {
+        snakeSpeed = 3
+        key = ''
         this.pos = createVector(100, 100)
         this.velMag = snakeSpeed
         this.xDir = this.velMag
@@ -134,7 +171,6 @@ class Snake {
         this.direction = 'right'
         this.points = 0
         this.alpha = 1.05
-        key = ''
     }
 }
 
@@ -161,6 +197,7 @@ function draw() {
         StopGame()
     }
     snake.eat(fruit)
+    snake.findFood(fruit)
     snake.move()
     fill('orange')
     stroke('orange')
