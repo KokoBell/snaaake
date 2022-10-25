@@ -160,7 +160,7 @@ class Snake {
         }
     }
     reset() {
-        snakeSpeed = 3
+        snakeSpeed = 8
         key = ''
         this.pos = createVector(100, 100)
         this.velMag = snakeSpeed
