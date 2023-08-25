@@ -153,6 +153,31 @@ class Snake {
             this.updateHighScore()
         }
     }
+    changeDirection()
+    {
+    if (!snake.edges()) {
+        if (key === 'ArrowRight' && snake.vel.x != -snake.velMag) {
+            snake.xDir = snake.velMag
+            snake.vel = createVector(snake.xDir, 0)
+            snake.direction = 'right'
+        }
+        if (key === 'ArrowLeft' && snake.vel.x != snake.velMag) {
+            snake.xDir = -snake.velMag
+            snake.vel = createVector(snake.xDir, 0)
+            snake.direction = 'left'
+        }
+        if (key === 'ArrowUp' && snake.vel.y != snake.velMag) {
+            snake.yDir = -snake.velMag
+            snake.vel = createVector(0, snake.yDir)
+            snake.direction = 'up'
+        }
+        if (key === 'ArrowDown' && snake.vel.y != -snake.velMag) {
+            snake.yDir = snake.velMag
+            snake.vel = createVector(0, snake.yDir)
+            snake.direction = 'down'
+        }
+    }
+    }
     updateHighScore() {
         if (this.points > this.highScore) {
             this.highScore = this.points
@@ -209,7 +234,7 @@ function draw() {
     text('High Score', w - 200, 25)
     textSize(24)
     text(snake.highScore, w - 200, 50)
-    changeDirection()
+    snake.changeDirection()
 }
 
 function StopGame() {
@@ -227,29 +252,4 @@ function StopGame() {
         loop()
     })
     noLoop()
-}
-
-function changeDirection() {
-    if (!snake.edges()) {
-        if (key === 'ArrowRight' && snake.vel.x != -snake.velMag) {
-            snake.xDir = snake.velMag
-            snake.vel = createVector(snake.xDir, 0)
-            snake.direction = 'right'
-        }
-        if (key === 'ArrowLeft' && snake.vel.x != snake.velMag) {
-            snake.xDir = -snake.velMag
-            snake.vel = createVector(snake.xDir, 0)
-            snake.direction = 'left'
-        }
-        if (key === 'ArrowUp' && snake.vel.y != snake.velMag) {
-            snake.yDir = -snake.velMag
-            snake.vel = createVector(0, snake.yDir)
-            snake.direction = 'up'
-        }
-        if (key === 'ArrowDown' && snake.vel.y != -snake.velMag) {
-            snake.yDir = snake.velMag
-            snake.vel = createVector(0, snake.yDir)
-            snake.direction = 'down'
-        }
-    }
 }
