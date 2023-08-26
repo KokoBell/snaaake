@@ -29,18 +29,22 @@ class Food {
 }
 
 class Snake {
-    constructor(radius) {
+    constructor(radius, userSnake) {
         this.radius = radius
-        this.pos = createVector(100, 100)
+        this.userSnake = userSnake
+        this.starting_y = Math.floor(Math.random() * w)
+        this.starting_x = 99
+        this.snake_key = key
+        this.pos = createVector(this.starting_x, this.starting_y)
         this.velMag = snakeSpeed
         this.xDir = this.velMag
         this.yDir = 0
         this.vel = createVector(this.xDir, this.yDir)
-        this.body = [[99, 100], [98, 100], [97, 100], [96, 100], [95, 100], [94, 100], [93, 100], [92, 100], [91, 100], [90, 100], [89, 100], [88, 100], [87, 100], [86, 100], [85, 100], [84, 100], [83, 100], [82, 100], [81, 100], [80, 100]]
+        this.body = [[this.starting_x, this.starting_y], [98, this.starting_y], [97, this.starting_y], [96, this.starting_y], [95, this.starting_y], [94, this.starting_y], [93, this.starting_y], [92, this.starting_y], [91, this.starting_y], [90, this.starting_y], [89, this.starting_y], [88, this.starting_y], [87, this.starting_y], [86, this.starting_y], [85, this.starting_y], [84, this.starting_y], [83, this.starting_y], [82, this.starting_y], [81, this.starting_y], [80, this.starting_y]]
         this.direction = 'right'
         this.points = 0
         this.alpha = 1.05
-        this.highScore = getItem('highScore') ? getItem('highScore') : 0
+        this.highScore = getItem('highScore') ?? 0
     }
     async show() {
         stroke('pink')
@@ -50,6 +54,7 @@ class Snake {
             this.body[i] = this.body[i - 1]
         }
         if (this.body.length) {
+
             this.body[0] = [this.pos.x, this.pos.y]
         }
         if (this.body.length === 1) {
@@ -80,15 +85,16 @@ class Snake {
                 let dist = sqrt((xMag) ** 2 + (yMag) ** 2)
                 if (dist < 100) {
                     if (Math.abs(yMag) > Math.abs(xMag)) {
-                        key = 'ArrowLeft'
+                        this.snake_key = 'ArrowLeft'
                     } else {
-                        key = 'ArrowUp'
+                        this.snake_key = 'ArrowUp'
                     }
                 }
             }
         })
     }
     findFood(food) {
+        if(this.userSnake) return
         this.checkBody()
         let xMag = food.x - this.pos.x
         let yMag = food.y - this.pos.y
@@ -96,16 +102,16 @@ class Snake {
         let yD = (yMag) ** 2
         if (xD <= 50) {
             if (yMag > 0) {
-                key = 'ArrowDown'
+                this.snake_key = 'ArrowDown'
             } else {
-                key = 'ArrowUp'
+                this.snake_key = 'ArrowUp'
             }
         }
         if (yD <= 50) {
             if (xMag > 0) {
-                key = 'ArrowRight'
+                this.snake_key = 'ArrowRight'
             } else {
-                key = 'ArrowLeft'
+                this.snake_key = 'ArrowLeft'
             }
         }
     }
@@ -155,26 +161,55 @@ class Snake {
     }
     changeDirection()
     {
-    if (!snake.edges()) {
-        if (key === 'ArrowRight' && snake.vel.x != -snake.velMag) {
-            snake.xDir = snake.velMag
-            snake.vel = createVector(snake.xDir, 0)
-            snake.direction = 'right'
+        this.userSnake ? this.userChangeDirection() : this.autoChangeDirection()
+    }
+    userChangeDirection()
+    {
+    if (!this.edges()) {
+        if (key === 'ArrowRight' && this.vel.x != -this.velMag) {
+            this.xDir = this.velMag
+            this.vel = createVector(this.xDir, 0)
+            this.direction = 'right'
         }
-        if (key === 'ArrowLeft' && snake.vel.x != snake.velMag) {
-            snake.xDir = -snake.velMag
-            snake.vel = createVector(snake.xDir, 0)
-            snake.direction = 'left'
+        if (key === 'ArrowLeft' && this.vel.x != this.velMag) {
+            this.xDir = -this.velMag
+            this.vel = createVector(this.xDir, 0)
+            this.direction = 'left'
         }
-        if (key === 'ArrowUp' && snake.vel.y != snake.velMag) {
-            snake.yDir = -snake.velMag
-            snake.vel = createVector(0, snake.yDir)
-            snake.direction = 'up'
+        if (key === 'ArrowUp' && this.vel.y != this.velMag) {
+            this.yDir = -this.velMag
+            this.vel = createVector(0, this.yDir)
+            this.direction = 'up'
         }
-        if (key === 'ArrowDown' && snake.vel.y != -snake.velMag) {
-            snake.yDir = snake.velMag
-            snake.vel = createVector(0, snake.yDir)
-            snake.direction = 'down'
+        if (key === 'ArrowDown' && this.vel.y != -this.velMag) {
+            this.yDir = this.velMag
+            this.vel = createVector(0, this.yDir)
+            this.direction = 'down'
+        }
+    }
+    }
+    autoChangeDirection()
+    {
+    if (!this.edges()) {
+        if (this.snake_key === 'ArrowRight' && this.vel.x != -this.velMag) {
+            this.xDir = this.velMag
+            this.vel = createVector(this.xDir, 0)
+            this.direction = 'right'
+        }
+        if (this.snake_key === 'ArrowLeft' && this.vel.x != this.velMag) {
+            this.xDir = -this.velMag
+            this.vel = createVector(this.xDir, 0)
+            this.direction = 'left'
+        }
+        if (this.snake_key === 'ArrowUp' && this.vel.y != this.velMag) {
+            this.yDir = -this.velMag
+            this.vel = createVector(0, this.yDir)
+            this.direction = 'up'
+        }
+        if (this.snake_key === 'ArrowDown' && this.vel.y != -this.velMag) {
+            this.yDir = this.velMag
+            this.vel = createVector(0, this.yDir)
+            this.direction = 'down'
         }
     }
     }
@@ -186,7 +221,7 @@ class Snake {
     }
     reset() {
         snakeSpeed = 8
-        key = ''
+        this.snake_key = ''
         this.pos = createVector(100, 100)
         this.velMag = snakeSpeed
         this.xDir = this.velMag
@@ -208,7 +243,8 @@ function setup() {
     createCanvas(w, h)
     fruit = new Food()
     loop()
-    snake = new Snake(25, createVector(100, 100))
+    snake = new Snake(25, true)
+    snake2 = new Snake(20, false)
 }
 
 function draw() {
@@ -218,12 +254,23 @@ function draw() {
     background(0)
     fruit.show()
     snake.show()
+    snake2.show()
     if (gameOver) {
         StopGame()
     }
+
+    // User snake
     snake.eat(fruit)
     snake.findFood(fruit)
     snake.move()
+    snake.changeDirection()
+
+    // Autosnakes
+    snake2.eat(fruit)
+    snake2.findFood(fruit)
+    snake2.move()
+    snake2.changeDirection()
+
     fill('orange')
     stroke('orange')
     textSize(16)
@@ -234,7 +281,6 @@ function draw() {
     text('High Score', w - 200, 25)
     textSize(24)
     text(snake.highScore, w - 200, 50)
-    snake.changeDirection()
 }
 
 function StopGame() {
